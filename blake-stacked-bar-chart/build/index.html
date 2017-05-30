@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>blake-stacked-bar-chart</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="https://media.npr.org/favicon.ico" />
+    <style type="text/css">
+        /* Basic styles */
+        body {
+            font: 14px/1.4 Helvetica, Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            margin: 0 0 11px 0;
+        }
+
+        a, a:link,
+        a:visited {
+            color: #4774CC;
+            text-decoration: none;
+        }
+        a:hover,
+        a:active {
+            color: #bccae5;
+        }
+
+        .btn {
+            font-size: 12px;
+            line-height: 28px;
+            margin: 0;
+            float: left;
+            padding: 0 11px;
+            border: none;
+            background-color: #f7f7f7;
+            font-weight: bold;
+            cursor: pointer;
+            -webkit-font-smoothing: antialiased;
+        }
+        .btn:hover,
+        .btn:active {
+            background-color: #fff;
+        }
+
+        .btn:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-right: 1px solid #ccc;
+        }
+        .btn + .btn {
+            border-radius: 0;
+            border-right: 1px solid #ccc;
+        }
+        .btn:last-child {
+            border-right: none;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        a.btn.active,
+        a.btn.active:link,
+        a.btn.active:visited,
+        a.btn.active:hover,
+        a.btn.active:active {
+            background: #ccc;
+            color: #333;
+            cursor: default;
+        }
+
+        button.btn {
+            color: #4774CC;
+        }
+        button.btn:hover,
+        button.btn:active {
+            color: #bccae5;
+        }
+
+        .graphics-list li {
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
+
+        /* Header */
+        .parent-header {
+            background-color: #ebebeb;
+            position: fixed;
+            top: 0px;
+            width: 100%;
+            height: 80px;
+            overflow: hidden;
+        }
+        .parent-header:after,
+        .parent-header .row {
+            clear: both;
+        }
+        .parent-header .row {
+            height: 30px;
+            padding: 5px;
+        }
+        .parent-header .top {
+            background-color: #f7f7f7;
+        }
+        .parent-header .segment {
+            float: left;
+            padding-left: 5px;
+            padding-right: 5px;
+            white-space: nowrap;
+        }
+
+        .parent-header .right {
+            float: right;
+        }
+
+        .localhost,
+        a.localhost,
+        a.localhost:visited {
+            color: green;
+        }
+
+        .staging,
+        a.staging,
+        a.staging:visited {
+            color: orange;
+        }
+
+        .production,
+        a.production,
+        a.production:visited {
+            color: red;
+        }
+
+        .resize {
+            background-color: white;
+        }
+
+        /* Content */
+        .content {
+            margin: 100px 10px 10px 10px;
+        }
+
+        #preview-wrapper {
+            border: 2px dashed #ddd;
+            margin-bottom: 20px;
+        }
+
+        #preview {
+            width: 100%;
+        }
+
+        textarea {
+            font-family: Menlo, monospace;
+            display: block;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        body.unknown .hide-on-unknown,
+        body.production .hide-on-production,
+        body.staging .hide-on-staging,
+        .show-on-unknown,
+        .show-on-production,
+        .show-on-staging {
+            display: none;
+        }
+
+        body.unknown .show-on-unknown,
+        body.production .show-on-production,
+        body.staging .show-on-staging {
+            display: block;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header class="parent-header">
+
+        <div class="row top">
+
+            <div class="segment show-on-unknown">
+                <h1 class="unknown">Unknown</h1>
+            </div>
+
+            <div class="segment show-on-staging">
+                <h1 class="staging">Staging</h1>
+            </div>
+
+            <div class="segment show-on-production">
+                <h1 class="production">Production</h1>
+            </div>
+
+            <div class="segment hide-on-production">
+                <a class="btn" href="http://www.abc.net.au/dat/news/interactives/graphics/blake-stacked-bar-chart/">view in production</a>
+            </div>
+
+            <div class="segment hide-on-staging">
+                <a class="btn" href="http://newsdev3.aus.aunty.abc.net.au/tools/chart-builder/graphics/blake-stacked-bar-chart/build">view in staging</a>
+            </div>
+
+            <div class="right">
+
+                <div class="segment">
+                    <a class="btn" href="http://newsdev3.aus.aunty.abc.net.au/tools/chart-builder/">Chart Builder</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!--
+            <div class="segment">
+                <a class="btn resizer" data-width="220px" data-hash="sidebar" href="#">Sidebar (220px)</a>
+            </div>
+            -->
+
+            <div class="segment">
+                <a class="btn resizer" data-width="300px" href="#mobile">Mobile (300px)</a>
+                <a class="btn resizer" data-width="700px" href="#desktop">Desktop (700px)</a>
+                <a class="btn resizer" data-width="100%" href="#fluid">Fluid (100%)</a>
+            </div>
+
+            <div class="right">
+
+                
+                
+                <div class="segment show-on-staging">
+                    <form action="http://newsdev3.aus.aunty.abc.net.au/tools/chart-builder/server.php?action=update_from_content" method="post">
+                        <input type="hidden" name="slug" value="blake-stacked-bar-chart">
+                        <button class="btn" type="submit">Refresh content</button>
+                    </form>
+                </div>
+
+                <div class="segment show-on-staging">
+                    <form action="http://newsdev3.aus.aunty.abc.net.au/tools/chart-builder/server.php?action=deploy_to_production" method="post">
+                        <input type="hidden" name="slug" value="blake-stacked-bar-chart">
+                        <button class="btn" type="submit">Push to production</button>
+                    </form>
+                </div>
+
+                <div class="segment show-on-production">
+                    <form action="http://newsdev3.aus.aunty.abc.net.au/tools/chart-builder/server.php?action=deploy_to_production" method="post">
+                        <input type="hidden" name="slug" value="blake-stacked-bar-chart">
+                        <button class="btn" type="submit">Update from staging</button>
+                    </form>
+                </div>
+
+                <div class="segment">
+                    <a class="btn" href="https://docs.google.com/spreadsheets/d/17UE53tJXOb1covaBJNAScyXXhPkvHCZ0Zeo9_x6b8nE/edit" >Google Sheet</a>
+                </div>
+                
+                
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <div class="content">
+
+        <div id="preview-wrapper">
+            <div id='preview'>
+            </div>
+        </div>
+
+        <h2><span>Embed URL</span></h2>
+        <textarea readonly="readonly" rows="1">http://www.abc.net.au/news/interactives/chart/?chart=blake-stacked-bar-chart</textarea>
+
+        <!--
+        <h2>Embed HTML</h2>
+
+        <textarea readonly="readonly" rows="15">
+<div id="responsive-embed-blake-stacked-bar-chart">
+</div>
+<script src="http://www.abc.net.au/dat/news/interactives/graphics/lib/pym.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+    var pymParent = new pym.Parent(
+        'responsive-embed-blake-stacked-bar-chart',
+        'http://www.abc.net.au/dat/news/interactives/graphics/blake-stacked-bar-chart/child.html',
+        {}
+    );
+});
+</script>
+        </textarea>
+        -->
+
+    </div>
+
+    <script type="text/javascript" src="http://www.abc.net.au/dat/news/interactives/graphics/lib/pym.min.js"></script>
+
+    <script type="text/javascript">
+
+        var hostname = window.location.hostname;
+        var environment = 'unknown';
+        if (hostname === 'newsdev3.aus.aunty.abc.net.au') {
+            environment = 'staging';
+        } else if (hostname === 'www.abc.net.au' || hostname === 'mobile.abc.net.au') {
+            environment = 'production';
+        }
+
+        document.body.className = environment;
+
+        var previewWrapperEl = document.querySelector('#preview-wrapper');
+
+        var setWrapperWidthFromDataAttr = function (el) {
+            previewWrapperEl.style.width = el.getAttribute('data-width');
+            var activeEls = document.querySelectorAll('.btn.resizer.active');
+            for (var i = 0; i < activeEls.length; i++) {
+                activeEls.item(i).className = 'btn resizer';
+            }
+
+            el.className = 'active btn resizer';
+        };
+
+        var pymParent = new pym.Parent('preview', 'child.html', {});
+        var buttonEls = document.querySelectorAll('.resizer');
+        for (var i = 0; i < buttonEls.length; i++) {
+            var buttonEl = buttonEls.item(i);
+
+            buttonEl.addEventListener('click', function (e) {
+                setWrapperWidthFromDataAttr(this);
+                pymParent.sendWidth();
+            });
+
+            if (buttonEl.getAttribute('href') === (window.location.hash || '#desktop')) {
+                setWrapperWidthFromDataAttr(buttonEl);
+            }
+        }
+
+    </script>
+</body>
+</html>
